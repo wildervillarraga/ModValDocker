@@ -20,6 +20,9 @@ RUN apt-get install -y libapache2-mod-php5.6 \
     php5.6-curl \
     php5.6-gd \
     php5.6-intl \
+    php5.6-ldap \
+    php5.6-mysql \
+    php5.6-pgsql \
     php5.6-sqlite3 \
     php5.6-json \
     php5.6-mcrypt \
@@ -57,7 +60,11 @@ RUN apt-get autoremove -y
 RUN apt-get clean
 RUN apt-get autoclean
 
-RUN a2enmod
+RUN a2enmod ldap
+
+# Start Supervisord
+ADD scripts/imagestart.sh /imagestart.sh
+RUN chmod 755 /start.sh
 
 # Setup Volume
 VOLUME ["/app", "/etc/apache2/sites-enabled"]
@@ -69,6 +76,8 @@ RUN chown -Rf www-data.www-data /app
 RUN chown -Rf www-data.www-data /var/www/html
 
 # Expose Ports
+EXPOSE 443
 EXPOSE 80
+EXPOSE 9000
 
-CMD ["/bin/bash"]
+CMD ["/bin/bash", "/imagestart.sh"]

@@ -1,3 +1,4 @@
 <?PHP
-phpinfo();
+// phpinfo();
+ echo "Hola Wilder";
 ?>
